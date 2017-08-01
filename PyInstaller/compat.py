@@ -846,10 +846,13 @@ def check_requirements():
         if 'win32api' in sys.modules or 'pywintypes' in sys.modules:
             # Users should never see this error; if it occurs, it means someone
             # wasn't careful and added an import where it shouldn't be
-            # Unfortunately this error is triggered when running under pytest
-            # since all PyInstaller runs are done in the same process
-            logger.warning("Internal error: early pywin32 import was introduced")
-            return
+            
+            # resist the temptation to make this a warning! if the import order
+            # accidentally gets broken, then you will break support for MinGW!
+            
+            # Instead, call this function first before using something that uses
+            # pypiwin32.
+            raise SystemExit("Internal error: early pywin32 import was introduced")
 
         try:
             from PyInstaller.utils.win32 import winutils
