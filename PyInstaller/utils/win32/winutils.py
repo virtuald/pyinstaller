@@ -17,8 +17,7 @@ __all__ = ['get_windows_dir']
 import os
 import sys
 
-from PyInstaller import compat
-from PyInstaller.compat import is_py3
+from ... import compat
 
 import PyInstaller.log as logging
 logger = logging.getLogger(__name__)
@@ -28,12 +27,7 @@ def get_windows_dir():
     """
     Return the Windows directory e.g. C:\\Windows.
     """
-    try:
-        import win32api
-    except ImportError:
-        windir = compat.getenv('SystemRoot', compat.getenv('WINDIR'))
-    else:
-        windir = win32api.GetWindowsDirectory()
+    windir = compat.win32api.GetWindowsDirectory()
     if not windir:
         raise SystemExit("Error: Can not determine your Windows directory")
     return windir
@@ -44,11 +38,7 @@ def get_system_path():
     Return the path that Windows will search for dlls.
     """
     _bpath = []
-    try:
-        import win32api
-        sys_dir = win32api.GetSystemDirectory()
-    except ImportError:
-        sys_dir = os.path.normpath(os.path.join(get_windows_dir(), 'system32'))
+    sys_dir = compat.win32api.GetSystemDirectory()
     # Ensure C:\Windows\system32  and C:\Windows directories are
     # always present in PATH variable.
     # C:\Windows\system32 is valid even for 64bit Windows. Access do DLLs are
@@ -154,7 +144,7 @@ def convert_dll_name_to_str(dll_name):
     :param dll_name:
     :return:
     """
-    if is_py3 and isinstance(dll_name, bytes):
+    if compat.is_py3 and isinstance(dll_name, bytes):
         return str(dll_name, encoding='UTF-8')
     else:
         return dll_name

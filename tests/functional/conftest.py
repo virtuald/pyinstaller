@@ -38,16 +38,17 @@ import psutil # Manages subprocess timeout.
 _ROOT_DIR = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 sys.path.append(_ROOT_DIR)
 
-from PyInstaller import configure, config
-from PyInstaller import __main__ as pyi_main
-from PyInstaller.utils.cliutils import archive_viewer
+#from PyInstaller import configure, config
+#from PyInstaller import __main__ as pyi_main
 from PyInstaller.compat import is_darwin, is_win, is_py2, safe_repr, \
   architecture, is_linux, check_requirements
 
 # call this before importing winutils
 check_requirements()
+raise
 
 from PyInstaller.depend.analysis import initialize_modgraph
+from PyInstaller.utils.cliutils import archive_viewer
 from PyInstaller.utils.win32 import winutils
 
 # Globals
